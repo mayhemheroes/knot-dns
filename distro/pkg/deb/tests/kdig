@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+# Skip the test if no internet access
+ping -c1 1.1.1.1 2>&1 || exit 77
+
+expected=198.41.0.4
+answer=$(kdig +short +tls-ca @1.1.1.1 -q a.root-servers.net. -t A 2>&1 || true)
+
+if [ "$answer" != "$expected" ]; then
+    printf "expected: %s\ngot: %s\n" "$expected" "$answer" >&2
+    kdig -d +tls-ca @1.1.1.1 -q a.root-servers.net. -t A
+fi

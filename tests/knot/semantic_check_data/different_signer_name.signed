@@ -1,0 +1,52 @@
+example.com.		3600	IN SOA	dns1.example.com. hostmaster.example.com. (
+					2010111220 ; serial
+					21600      ; refresh (6 hours)
+					3600       ; retry (1 hour)
+					604800     ; expire (1 week)
+					86400      ; minimum (1 day)
+					)
+			3600	RRSIG	SOA 13 2 3600 (
+					20601231235959 20201008164859 49259 example.com.
+					UH4IJhLwxWI9g2vycAuGAHm5XzsW5LKr6xeI
+					aoaiMeb1pepw9vAWEUO1Byimg7FfhvYpt7+J
+					IhYCvpBb6u3ucA== )
+			3600	NS	dns1.example.com.
+			3600	RRSIG	NS 13 2 3600 (
+					20601231235959 20201008164859 49259 example.com.
+					ou6B0AgSUxs7//b+c+Gm3XjC83TpgGvRwj9d
+					F48TEZCMRpdvtVNc1hDnNKa8oXA16TafbkqN
+					Z0ekrEo2LlN+hw== )
+			86400	NSEC	dns1.example.com. NS SOA RRSIG NSEC DNSKEY
+			86400	RRSIG	NSEC 13 2 86400 (
+					20601231235959 20201008164859 49259 example.com.
+					uCzqU8DU8ZMt3t/h0jwZjdVgSj33HhwtGwhE
+					ZglZ0gUVDVLndP5Q+psqlz2jBmiXIN16s/+b
+					di0crJ9LULq0NA== )
+			3600	DNSKEY	256 3 13 (
+					qWpA6ejmc17FHZTN/YoYX4WdNN32LC2IlBmm
+					n2Yoi16OQ1e2ztEusvQaSwzEMbN2pIzfTIlF
+					YQQ1gzLQAhWIpg==
+					) ; ZSK; alg = ECDSAP256SHA256 ; key id = 49259
+			3600	DNSKEY	257 3 13 (
+					rHQi5BOkLnSsZh1v9saRZ38MkzYLL0oGbAK2
+					Dp86tH3lpDqPoR7LM98gyBLZgp81m0YHAYnf
+					2yK617XStIPw+A==
+					) ; KSK; alg = ECDSAP256SHA256 ; key id = 3753
+			3600	RRSIG	DNSKEY 13 2 3600 (
+					20601231235959 20201008164859 3753 example.com.
+					81C/yn0gxkwOMUWNZPszGow4UyDuDn1V4WQJ
+					NXJfNiTvT6edQ0rQakhJPGgVyH4LIwWJV8Uk
+					fOubCv7BBgu0wg== )
+dns1.example.com.	3600	IN A	192.0.2.1
+			3600	RRSIG	A 13 3 3600 (
+					20601231235959 20201008164859 49259 example.com.
+					x6z2ftS2deCBR9HJeIazQNrDdzw0lEE04UYp
+					npUe2zkIx6aH7MvvgZIjcFTwPOVsI00u7gaU
+					AzuxODSma50TXQ== )
+			86400	NSEC	example.com. A RRSIG NSEC
+; different signer name in RRSIG
+			86400	RRSIG	NSEC 13 3 86400 (
+					20601231235959 20201008164859 49259 different.com.
+					K/URrUmli54Noy0E3REXBo/g0LZ/8gneyVfa
+					FrGXLB0kvQydPyceL+BFIoJP6d/Gs/0qkUjT
+					vMQfvF0x3bFS3w== )

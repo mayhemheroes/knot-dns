@@ -1,0 +1,22 @@
+$ORIGIN example.com.
+$TTL 3600
+
+@	IN	SOA	dns1.example.com. hostmaster.example.com. (
+		2010111217	; serial
+		6h		; refresh
+		1h		; retry
+		1w		; expire
+		1d )		; minimum
+
+	NS	dns1
+
+dns1	A	1.2.3.4
+
+abc	NS	a.ns.abc
+deleg1	NS	a.ns.abc
+deleg2	NS	a.ns.ns.ns.ns.xyz
+
+; wildcard glue
+
+*.ns.abc	AAAA	::1
+*.ns.xyz	AAAA	::2

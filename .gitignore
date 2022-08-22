@@ -1,0 +1,97 @@
+*.swp
+*~
+*.la
+*.a
+*.o
+*.orig
+*.lo
+*.rej
+*.pyc
+*.pc
+.libs/
+.deps/
+.dirstamp
+/tmp
+/Knot.creator.user*
+/Knot.cflags
+/Knot.cxxflags
+/Doxyfile
+/aclocal.m4
+/ar-lib
+/autoscan.log
+/config.guess
+/config.sub
+/config.log
+/config.status
+/libtool
+/ltmain.sh
+/configure
+/configure.scan
+/compile
+/depcomp
+/install-sh
+/missing
+/ylwrap
+/autom4te.cache/
+/src/config.h
+/src/config.h.in
+/src/stamp-*
+/INSTALL
+/m4/libtool.m4
+/m4/ltoptions.m4
+/m4/ltsugar.m4
+/m4/ltversion.m4
+/m4/lt~obsolete.m4
+/test-driver
+Makefile
+Makefile.in
+/src/lib*/version.h
+
+/samples/knot.sample.conf
+/src/knot/modules/static_modules.h
+
+# dnstap
+/src/contrib/dnstap/Makefile
+/src/contrib/dnstap/Makefile.in
+/src/contrib/dnstap/dnstap.pb-c.c
+/src/contrib/dnstap/dnstap.pb-c.h
+
+# zscanner
+/src/libzscanner/scanner.c
+
+# xdp
+/src/libknot/xdp/bpf-kernel.ll
+
+# Binaries
+/src/kcatalogprint
+/src/kdig
+/src/keymgr
+/src/khost
+/src/kjournalprint
+/src/knotc
+/src/knotd
+/src/knsec3hash
+/src/knsupdate
+/src/kxdpgun
+/src/kzonecheck
+/src/kzonesign
+
+# Generated tarballs
+/knot-*.tar.xz
+
+# Packaging output
+/pkg
+
+# Code coverage
+*.gcda
+*.gcno
+/coverage.info
+/coverage.html
+
+# Vagrant
+.vagrant
+
+# eclipse
+/.project
+/.cproject
+/.settings/

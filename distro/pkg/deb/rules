@@ -1,0 +1,101 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_CFLAGS_MAINT_APPEND  = -Wall -DNDEBUG
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+export DPKG_GENSYMBOLS_CHECK_LEVEL := 4
+export KNOT_SOFTHSM2_DSO = /usr/lib/softhsm/libsofthsm2.so
+
+include /usr/share/dpkg/default.mk
+
+ifeq (maint,$(filter $(DEB_BUILD_OPTIONS),maint))
+  FASTPARSER := --disable-fastparser
+else
+  FASTPARSER := --enable-fastparser
+endif
+
+ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),hurd-i386))
+  RECVMMSG:=--enable-recvmmsg=no
+else
+  RECVMMSG:=--enable-recvmmsg=yes
+endif
+
+ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),amd64 i386))
+  RUN_TEST :=
+else
+  RUN_TEST := -timeout --kill-after=5s 5m
+endif
+
+LIBKNOT_SYMBOLS := $(wildcard $(CURDIR)/debian/libknot*.symbols)
+
+# MAJOR.MINOR version part
+BASE_VERSION := $(shell echo $(DEB_VERSION) | sed 's/^\([^.]\+\.[^.]\+\).*/\1/')
+
+PYBUILD = pybuild --dir python --dest-dir debian/python3-libknot
+
+%:
+	dh $@ \
+	 --exclude=.la --exclude=example.com.zone \
+	 --with python3
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+	  --sysconfdir=/etc \
+	  --localstatedir=/var/lib \
+	  --libexecdir=/usr/lib/knot \
+	  --with-rundir=/run/knot \
+	  --with-moduledir=/usr/lib/$(DEB_HOST_MULTIARCH)/knot/modules-$(BASE_VERSION) \
+	  --with-storage=/var/lib/knot \
+	  --enable-systemd=auto \
+	  --enable-dnstap \
+	  --with-module-dnstap=shared \
+	  --with-module-geoip=shared \
+	  $(RECVMMSG) \
+	  $(FASTPARSER) \
+	  --disable-silent-rules \
+	  --enable-xdp=yes \
+	  --enable-quic=yes \
+	  --disable-static
+
+override_dh_auto_configure-indep:
+	$(PYBUILD) --configure
+
+override_dh_auto_build-indep:
+	dh_auto_build -- html
+	$(PYBUILD) --build
+
+override_dh_auto_install-arch:
+	dh_auto_install -- install
+	# rename knot.sample.conf to knot.conf
+	mv $(CURDIR)/debian/tmp/etc/knot/knot.sample.conf $(CURDIR)/debian/tmp/etc/knot/knot.conf
+	# Some workarounds where XDP is unavailable
+	@if [ -f "$(CURDIR)/debian/tmp/usr/sbin/kxdpgun" ]; then \
+	  echo "XDP enabled"; \
+	  if grep -E -q "DoQ support: +no" "$(CURDIR)/debian/tmp/usr/sbin/knotd"; then \
+	    echo "Stripping the QUIC symbols"; \
+	    sed -i '/knot_xquic_/d' $(LIBKNOT_SYMBOLS); \
+	  fi \
+	else \
+	  echo "XDP disabled"; \
+	  touch $(CURDIR)/debian/tmp/usr/share/man/man8/kxdpgun.8; \
+	  printf '#!/bin/sh\n\necho "kxdpgun not available"\n' > $(CURDIR)/debian/tmp/usr/sbin/kxdpgun; \
+	fi
+
+override_dh_auto_install-indep:
+	dh_auto_install -- install-html
+	# rename knot.sample.conf to knot.conf
+	mv $(CURDIR)/debian/tmp/etc/knot/knot.sample.conf $(CURDIR)/debian/tmp/etc/knot/knot.conf
+	$(PYBUILD) --install
+
+override_dh_auto_test-indep:
+override_dh_auto_test-arch:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	$(RUN_TEST) dh_auto_test
+endif
+
+override_dh_missing:
+	dh_missing --fail-missing
+
+override_dh_installchangelogs:
+	dh_installchangelogs NEWS

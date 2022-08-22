@@ -1,0 +1,16 @@
+[project]
+name = "knot-dns"
+# needed for make-archive
+make_archive_script = "scripts/make-dev-archive.sh"
+
+[upstream]
+# needed for get-archive
+archive_url = "https://secure.nic.cz/files/knot-dns/knot-{{ version }}.tar.xz"
+signature_url = "https://secure.nic.cz/files/knot-dns/knot-{{ version }}.tar.xz.asc"
+
+[apkg]
+compat = 2
+
+[[distro.aliases]]
+name = "el-7"
+distro = ["centos == 7", "rhel == 7"]

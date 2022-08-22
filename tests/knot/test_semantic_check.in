@@ -1,0 +1,169 @@
+#!/bin/sh
+
+KZONECHECK="@top_builddir@/src/kzonecheck"
+DATA="@top_srcdir@/tests/knot/semantic_check_data"
+
+. "@top_srcdir@/tests/tap/libtap.sh"
+
+TMPDIR=$(test_tmpdir)
+LOG="$TMPDIR/log"
+
+# Params: zonefile fatal_error expected_erros_count semcheck_err_msg
+expect_error()
+{
+	if [ ! -r "$DATA/$1" ]; then
+		skip_block 4 "missing zone file for test"
+		return
+	fi
+
+	"$KZONECHECK" -o example.com "$DATA/$1" > "$LOG"
+	ok "$1 - check program return" test $? -eq 1
+
+	fatal=$(grep -E "^Serious semantic error detected" $LOG | wc -l)
+	ok "$1 - check fatal" test $fatal -eq $2
+
+	errors=$(grep -E "^\[.+\] $4" $LOG | wc -l)
+	ok "$1 - check errors" test $errors -eq $3
+	if [ $errors != $3 ]; then
+		diag "expected errors $3 but found $errors"
+	fi
+}
+
+#param zonefile
+test_correct()
+{
+	$KZONECHECK -o example.com "$DATA/$1" > /dev/null
+	ok "$1 - correct zone, without error" test $? -eq 0
+}
+
+#param zonefile
+test_correct_no_dnssec()
+{
+	$KZONECHECK -o example.com -d off "$DATA/$1" > /dev/null
+	ok "$1 - correct zone, without error" test $? -eq 0
+}
+
+if [ ! -x $KZONECHECK ]; then
+	skip_all "kzonecheck is missing or is not executable"
+fi
+
+# error messages exported from knot/src/zone/semantic-check.c
+CDNSKEY_NONE="missing CDNSKEY"
+CDNSKEY_NO_CDS="CDNSKEY without corresponding CDS"
+CDNSKEY_DELETE="invalid CDNSKEY/CDS for DNSSEC delete algorithm"
+CDS_NONE="missing CDS"
+CDS_NOT_MATCH="CDS not match CDNSKEY"
+CNAME_EXTRA_RECORDS="another record exists beside CNAME"
+CNAME_MULTIPLE="multiple CNAME records"
+DNAME_CHILDREN="child record exists under DNAME"
+DNAME_MULTIPLE="multiple DNAME records"
+DNAME_EXTRA_NS="NS record exists beside DNAME"
+DNSKEY_INVALID="invalid DNSKEY"
+DS_ALG="invalid algorithm in DS"
+NSEC3PARAM_FLAGS="invalid flags in NSEC3PARAM"
+NSEC_NONE="missing NSEC\(3\) record"
+NSEC_RDATA_BITMAP="wrong NSEC\(3\) bitmap"
+NSEC_RDATA_CHAIN="inconsistent NSEC\(3\) chain"
+NSEC3_INSECURE_DELEGATION_OPT="wrong NSEC3 opt-out"
+NS_APEX="missing NS at the zone apex"
+NS_GLUE="missing glue record"
+RRSIG_UNVERIFIABLE="no valid signature for a record"
+
+plan_lazy
+
+expect_error "cname_extra_01.zone"   1 1 "$CNAME_EXTRA_RECORDS"
+expect_error "cname_extra_02.signed" 1 1 "$CNAME_EXTRA_RECORDS"
+expect_error "cname_multiple.zone"   1 1 "$CNAME_MULTIPLE"
+expect_error "dname_children.zone"   1 1 "$DNAME_CHILDREN"
+expect_error "dname_multiple.zone"   1 1 "$DNAME_MULTIPLE"
+expect_error "dname_extra_ns.zone"   1 1 "$DNAME_EXTRA_NS"
+
+expect_error "ns_apex.missing" 0 1 "$NS_APEX"
+expect_error "glue_apex_both.missing" 0 2 "$NS_GLUE"
+expect_error "glue_apex_one.missing" 0 1 "$NS_GLUE"
+expect_error "glue_besides.missing" 0 1 "$NS_GLUE"
+expect_error "glue_deleg.missing" 0 1 "$NS_GLUE"
+expect_error "glue_in_apex.missing" 0 1 "$NS_GLUE"
+expect_error "different_signer_name.signed" 0 1 "$RRSIG_UNVERIFIABLE"
+expect_error "no_rrsig.signed" 0 1 "$RRSIG_UNVERIFIABLE"
+expect_error "no_rrsig_with_delegation.signed" 0 1 "$RRSIG_UNVERIFIABLE"
+expect_error "nsec_broken_chain_01.signed" 0 1 "$NSEC_RDATA_CHAIN"
+expect_error "nsec_broken_chain_02.signed" 0 1 "$NSEC_RDATA_CHAIN"
+expect_error "nsec_missing.signed" 0 1 "$NSEC_NONE"
+expect_error "nsec_multiple.signed" 0 1 "$NSEC_NONE"
+expect_error "nsec_wrong_bitmap_01.signed" 0 1 "$NSEC_RDATA_BITMAP"
+expect_error "nsec_wrong_bitmap_02.signed" 0 1 "$NSEC_RDATA_BITMAP"
+expect_error "nsec3_missing.signed" 0 1 "$NSEC_NONE"
+expect_error "nsec3_optout_ent.invalid" 0 1 "$NSEC_NONE"
+expect_error "nsec3_wrong_bitmap_01.signed" 0 1 "$NSEC_RDATA_BITMAP"
+expect_error "nsec3_wrong_bitmap_02.signed" 0 1 "$NSEC_RDATA_BITMAP"
+expect_error "nsec3_ds.signed" 0 1 "$NSEC_NONE"
+expect_error "nsec3_optout.signed" 0 1 "$NSEC3_INSECURE_DELEGATION_OPT"
+expect_error "nsec3_chain_01.signed" 0 1 "$NSEC_RDATA_CHAIN"
+expect_error "nsec3_chain_02.signed" 0 1 "$NSEC_RDATA_CHAIN"
+expect_error "nsec3_chain_03.signed" 0 1 "$NSEC_RDATA_CHAIN"
+expect_error "nsec3_param_invalid.signed" 0 1 "$NSEC_NONE"
+expect_error "nsec3_param_invalid.signed" 0 1 "$NSEC3PARAM_FLAGS"
+expect_error "rrsig_signed.signed" 0 1 "$RRSIG_UNVERIFIABLE"
+expect_error "rrsig_rdata_ttl.signed" 0 1 "$RRSIG_UNVERIFIABLE"
+expect_error "duplicate.signature" 0 1 "$RRSIG_UNVERIFIABLE"
+expect_error "missing.signed" 0 1 "$NSEC_NONE"
+expect_error "dnskey_param_error.signed" 0 1 "$DNSKEY_INVALID"
+expect_error "invalid_ds.signed" 0 2 "$DS_ALG \(keytag 60485\)"
+expect_error "cdnskey.invalid" 0 1 "$CDS_NOT_MATCH"
+expect_error "cdnskey.invalid.param" 0 1 "$CDS_NOT_MATCH"
+expect_error "cdnskey.nocds" 0 1 "$CDS_NONE"
+expect_error "cdnskey.nocdnskey" 0 1 "$CDNSKEY_NONE"
+expect_error "cdnskey.nodnskey" 0 1 "$CDNSKEY_NOT_MATCH"
+expect_error "cdnskey.orphan.cds" 0 1 "$CDS_NOT_MATCH"
+expect_error "cdnskey.orphan.cdnskey" 0 1 "$CDNSKEY_NO_CDS"
+expect_error "cdnskey.delete.invalid.cds" 0 1 "$CDNSKEY_DELETE"
+expect_error "cdnskey.delete.invalid.cdnskey" 0 1 "$CDNSKEY_DELETE"
+expect_error "delegation.signed" 0 1 "$NSEC_RDATA_BITMAP"
+
+test_correct "rrsig_ttl.signed"
+test_correct "no_error_delegation_bitmap.signed"
+test_correct "no_error_nsec3_optout.signed"
+test_correct "glue_wildcard.valid"
+test_correct "glue_no_foreign.valid"
+test_correct "glue_in_deleg.valid"
+test_correct "cdnskey.cds"
+test_correct "cdnskey.delete.both"
+test_correct "dname_apex_nsec3.signed"
+test_correct "nsec3_optout_ent.valid"
+test_correct "nsec3_optout_ent.all"
+
+test_correct_no_dnssec "no_rrsig.signed"
+test_correct_no_dnssec "no_rrsig_with_delegation.signed"
+test_correct_no_dnssec "nsec_broken_chain_01.signed"
+test_correct_no_dnssec "nsec_broken_chain_02.signed"
+test_correct_no_dnssec "nsec_missing.signed"
+test_correct_no_dnssec "nsec_multiple.signed"
+test_correct_no_dnssec "nsec_wrong_bitmap_01.signed"
+test_correct_no_dnssec "nsec_wrong_bitmap_02.signed"
+test_correct_no_dnssec "nsec3_missing.signed"
+test_correct_no_dnssec "nsec3_wrong_bitmap_01.signed"
+test_correct_no_dnssec "nsec3_wrong_bitmap_02.signed"
+test_correct_no_dnssec "nsec3_ds.signed"
+test_correct_no_dnssec "nsec3_optout.signed"
+test_correct_no_dnssec "nsec3_chain_01.signed"
+test_correct_no_dnssec "nsec3_chain_02.signed"
+test_correct_no_dnssec "nsec3_chain_03.signed"
+test_correct_no_dnssec "nsec3_param_invalid.signed"
+test_correct_no_dnssec "rrsig_signed.signed"
+test_correct_no_dnssec "rrsig_rdata_ttl.signed"
+test_correct_no_dnssec "duplicate.signature"
+test_correct_no_dnssec "missing.signed"
+test_correct_no_dnssec "dnskey_param_error.signed"
+test_correct_no_dnssec "cdnskey.invalid"
+test_correct_no_dnssec "cdnskey.invalid.param"
+test_correct_no_dnssec "cdnskey.nocds"
+test_correct_no_dnssec "cdnskey.nocdnskey"
+test_correct_no_dnssec "cdnskey.nodnskey"
+test_correct_no_dnssec "cdnskey.orphan.cds"
+test_correct_no_dnssec "cdnskey.orphan.cdnskey"
+test_correct_no_dnssec "cdnskey.delete.invalid.cds"
+test_correct_no_dnssec "cdnskey.delete.invalid.cdnskey"
+test_correct_no_dnssec "delegation.signed"
+
+rm $LOG

@@ -1,0 +1,87 @@
+;; Zone dump (Knot DNS 3.1.dev.1605506958.657510044)
+example.            	1800	SOA	ns1.example. bugs.x.w.example. 1081539379 3600 300 3600000 3600
+example.            	3600	NS	ns1.example.
+example.            	3600	NS	ns2.example.
+example.            	3600	MX	1 xx.example.
+example.            	1800	DNSKEY	256 3 13 TZzHPHmjv5L18OZTEO+our8VkzRqcAgiAzHO7vqZHAlVEGdOiJGqR9u8KTFlqBy+DoMX1xqOzAfXex4Als4oKQ==
+example.            	1800	DNSKEY	257 3 13 dPZ998ykNzLXbRejTKQZzyp2HEyPpiOu/akV5bJR6qEOyjVAf+oeoLjcNp/6vGjbqBJVXnEX12DgDqfIF8oZ7g==
+a.example.          	3600	NS	ns1.a.example.
+a.example.          	3600	NS	ns2.a.example.
+a.example.          	3600	DS	57855 5 1 B6DCD485719ADCA18E5F3D48A2331627FDD3636B
+*.a.example.        	3600	A	192.0.2.11
+ns1.a.example.      	3600	A	192.0.2.5
+ns2.a.example.      	3600	A	192.0.2.6
+ai.example.         	3600	A	192.0.2.9
+ai.example.         	3600	HINFO	"KLH-10" "ITS"
+ai.example.         	3600	AAAA	2001:db8::f00:baa9
+b.example.          	3600	NS	ns1.b.example.
+b.example.          	3600	NS	ns2.b.example.
+ns1.b.example.      	3600	A	192.0.2.7
+ns2.b.example.      	3600	A	192.0.2.8
+ns1.example.        	3600	A	192.0.2.1
+ns2.example.        	3600	A	192.0.2.2
+*.to-apex.example.  	3600	CNAME	example.
+*.to-nxdomain.example.	3600	CNAME	nxdomain.example.
+*.w.example.        	3600	MX	1 ai.example.
+x.w.example.        	3600	MX	1 xx.example.
+x.y.w.example.      	3600	MX	1 xx.example.
+xx.example.         	3600	A	192.0.2.10
+xx.example.         	3600	HINFO	"KLH-10" "TOPS-20"
+xx.example.         	3600	AAAA	2001:db8::f00:baaa
+\000.nsec-deleg.z.z.example.	3600	NS	ns1.a.example.
+a.nsec-deleg.z.z.example.	3600	A	192.0.2.1
+c.nsec-deleg.z.z.example.	3600	A	192.0.2.1
+;; DNSSEC signatures
+example.            	3600	RRSIG	NS 13 1 3600 20881212125908 20201124094501 52634 example. oDwhp6uQjJjgSlr1XDxZlgBWnuXjf2dmp4SdH4UwRavoMYmOeYMlJJnkS/oh2GjisZdoUX498NYU7hmvc3CKVg==
+example.            	1800	RRSIG	SOA 13 1 1800 20881212130733 20201124095326 52634 example. G6WZnm/cx/D7+VG+ZQwhHs7eUwBkcO0x6GurCiCmgPkwrdxaXASQgDMnyur6FgtQFOslb5Od9MBfCcWRUztGHA==
+example.            	3600	RRSIG	MX 13 1 3600 20881212125908 20201124094501 52634 example. zJMbVO5Am77emRccrxhkE3SLiQ4lAy6D9+I8fK1hIIRgCwOZk8e0gDJ1g2CoYa+nE0iZGkmbcO83m3DKB4G1QA==
+example.            	1800	RRSIG	NSEC 13 1 1800 20881212130328 20201124094921 52634 example. BEqre7s4WS738Wch17zQFV5DBJGbFs045fyhOe/6gXBG2VIeBwSlTb364oSeZJ7UnGu/7LmALss5PR/Bs0Evdg==
+example.            	1800	RRSIG	DNSKEY 13 1 1800 20881212130733 20201124095326 12307 example. CMutQxj5MtlCnOUtyddIGnjPOq7PplrI9Kfd3FqTKi8A6hvEKyTnRdfyNvg2s4usHlJglG6WEMg0x3Q7/zmoow==
+a.example.          	3600	RRSIG	DS 13 2 3600 20881212125908 20201124094501 52634 example. Gz0rPFevHrwUyviJlng4M3BrLTKanqNSCKyG6a4TJbJJyVK8VC946N2HmDGnKjBDyKqyJsSrwnGPTNVfuBMcrw==
+a.example.          	1800	RRSIG	NSEC 13 2 1800 20881212130203 20201124094756 52634 example. w/dh5gQvc/pFKCXZV3YuvCh8eHpIhAC4VCv09YALnN8ca0fUWz3J9jBirzegEuj0ffKtmb9tmkLLpyFBi6p1wg==
+ai.example.         	3600	RRSIG	A 13 2 3600 20881212125908 20201124094501 52634 example. 24S1o4ySaXWok8MgYJorokmHaR06OglLxoqvtFEDJMHqt8QEdpVXzqcK24KwuLdmG/JS65xzTriOWS548b110w==
+ai.example.         	3600	RRSIG	HINFO 13 2 3600 20881212125908 20201124094501 52634 example. uLEfl3fqVJg+zEzaUVMSuNWaLVFWjDcRo4pa7DftrFxV7hwqA3TMzfUB7ZTS+cH0RyLliaQZ5ptWfY29YpmIbg==
+ai.example.         	3600	RRSIG	AAAA 13 2 3600 20881212125908 20201124094501 52634 example. jjSuBVmCEFyaLP1UT67cWVGBDUif7fxL0PIIe8XPr/pd+g2FADVXO1bMJlPPBQgDHAWky96f7zfFqy+a2fObTw==
+ai.example.         	1800	RRSIG	NSEC 13 2 1800 20881212130203 20201124094756 52634 example. mWmrKGn++aMSMLiR5So9lFqjNkcS1slmc1RLWxsmX/GPRUJV9xMzfuN+vOtxPBGoeRBy/J7hf0kpD5uvEUt4Zw==
+b.example.          	1800	RRSIG	NSEC 13 2 1800 20881212130203 20201124094756 52634 example. Mz8lFFDVMvUsNO6nLE5Q4Ul0dPXkF7OqeODzO/aAt2Tvr7MDMJKSsFZTyHgMdNVcjIAioR8jWEzcTxpR2v2+lA==
+ns1.example.        	3600	RRSIG	A 13 2 3600 20881212125908 20201124094501 52634 example. A6bgnZ7rbrQDw2jmLWPNxieCWtLzqGi2Jf8pRq9ULAGkWjEBf2F4srIIPymtdTmdgzyKpZN6OPZUoT7V0GAITg==
+ns1.example.        	1800	RRSIG	NSEC 13 2 1800 20881212130203 20201124094756 52634 example. 26jn+8u8Xi9P+vRpdySPv23k7zkzRnSMcQI7u+s0irRLYqRC5X45RAGvrbXIQx/osi7PCT4iZ/AAd7oOrcNGPA==
+ns2.example.        	3600	RRSIG	A 13 2 3600 20881212125908 20201124094501 52634 example. Lc4qh2YJllCx5JuGJR0V5yiKx7FAld12/87qYk3832LmA3hJVSat/qYakJAmSIOozWRpw8fXfl4G2XuTvBtVTw==
+ns2.example.        	1800	RRSIG	NSEC 13 2 1800 20881212130203 20201124094756 52634 example. uykeMd83IV3NozHSTMyimObrNMMXV6aDq3cjF3L5IWclg4T7M8IBbhW0VHFsZFsRktMg8TYsRGfLYf5hc+uvVw==
+*.to-apex.example.  	3600	RRSIG	CNAME 13 2 3600 20881212125908 20201124094501 52634 example. NIl2nLDiWHrGP8sdOYMTf0ewJ5skv0i2qzoIAwanNwNzg2k3tC8yutOUOfdCRsK+0kFy5eFSGU4DG12eC5f61g==
+*.to-apex.example.  	1800	RRSIG	NSEC 13 2 1800 20881212130203 20201124094756 52634 example. IXyXj6MlF3zy1xoPldbw8GN5Yik5cVexLAHVzub0tgeSi/NUfbdppWM/sKydLxKV7Y7zZCyCNL/v10rtYBIyHA==
+*.to-nxdomain.example.	3600	RRSIG	CNAME 13 2 3600 20881212125908 20201124094501 52634 example. ixLRukkE6YUzqs13CBTHmguB73shcff4YzeTSGbwOYkebT/uuKc88kJsZ1Kd9tUF1iu/26YphnkrwGNHf7u2hg==
+*.to-nxdomain.example.	1800	RRSIG	NSEC 13 2 1800 20881212130203 20201124094756 52634 example. lfnHR7a1lebU4guj4MpqfoG+XRbYjcSxICbKcusPUMZ3PgATgnIOfhiBNOvCuWjDy6O2kJV0pL6JSLyEkbwuJw==
+*.w.example.        	3600	RRSIG	MX 13 2 3600 20881212125908 20201124094501 52634 example. 2LnYeA6BOAMgnw6SrZ6vFR7EHZu/zIuvLt51qPOQgEQgHG6GtWJHbaZ5aPNof+lHJMsbwygH73HgqawwHyt1HA==
+*.w.example.        	1800	RRSIG	NSEC 13 2 1800 20881212130203 20201124094756 52634 example. vZbISQwkr+nlPEGHLs2v/9UWquKP6qfkUN/1D1GF8kvXUh6vqju3EGlaB3iVOfQzRJksPyLJ4UGfheW0N2325w==
+x.w.example.        	3600	RRSIG	MX 13 3 3600 20881212125908 20201124094501 52634 example. 6kEQd2egtdiMIyDRuYI0i+Rott4F/R2c5z8iOUOvq4MqvYBrK32FE2CmJ/ImkiOo6EkFmIvEt5ubCvZwvVGgUQ==
+x.w.example.        	1800	RRSIG	NSEC 13 3 1800 20881212130203 20201124094756 52634 example. smEJmzbtsGSwHONSQUf4vi12czznCBiN6qCFdlzKdmJ3lZg7V+rg5MlwhwIstV6LjcT3M1QDuBwq+8JVLWWjCQ==
+x.y.w.example.      	3600	RRSIG	MX 13 4 3600 20881212125908 20201124094501 52634 example. 0K3DsCVuB+zQDp5EpJk5OuATT5bluykHsOUyi3XajAXn9jAGRcxQBou9by6KvblA8G2HTqbm2cRkbhRTMuxC7g==
+x.y.w.example.      	1800	RRSIG	NSEC 13 4 1800 20881212130203 20201124094756 52634 example. tPj7HdyVtDzppebxp+VMaNMPr8SBEzFTgPoy0Jb77YX7ZFfJVGH/H79VunJ2Rr2Wu/0VgvI1Wf+tnBIC60gKWw==
+xx.example.         	3600	RRSIG	A 13 2 3600 20881212125908 20201124094501 52634 example. j/Qko5fRAA/RaughKHQlKR1ITfkS1jrWWpCAlTzZPoCmOfFYyxxfXfwutRcwoD2J9SP2EO3uBrDjOyTjtG6qOA==
+xx.example.         	3600	RRSIG	HINFO 13 2 3600 20881212125908 20201124094501 52634 example. j96fF2Zfm6YHRL2bbK5+jshQI6QMMhLHZJuQkRSsdgr+EJzYnrLJXiTO2FWwN8OvOD7yeymks065FsAY+2P39A==
+xx.example.         	3600	RRSIG	AAAA 13 2 3600 20881212125908 20201124094501 52634 example. 3DSTlFrF//MkIBv3xXYBU5ILn3DU1+BNL8Aa4oRGSsxlYHFTg4E0RaJNolo75qyGG6mblkGdsNe4AHHUSE/3Xg==
+xx.example.         	1800	RRSIG	NSEC 13 2 1800 20881212130203 20201124094756 52634 example. Fm02eN+XWJgqWxtGBRog4OM8uFxTxDdbK0Joxzf/L8HKV3vXjbUnI6Z2CpFm0Dw7tzi9LwZU5fGm3hKBGu2l4g==
+\000.nsec-deleg.z.z.example.	1800	RRSIG	NSEC 13 5 1800 20881212130203 20201124094756 52634 example. 700OekEhlXyWhBIPURubUSqRvDgIFooYlQUekmaJqXr2B/A4MoVUD9ymlT/F/3NgZRa/yRvFxLt4PqKxc/ebXA==
+a.nsec-deleg.z.z.example.	3600	RRSIG	A 13 5 3600 20881212125908 20201124094501 52634 example. fdfF2y6joJZv9OmJYXKAuruU99jmGUJhwD5MgDWtQ6gjT0Vh8SqFhI2MEirVPg+/ygUDReSOmkmCtPsOCXQVtQ==
+a.nsec-deleg.z.z.example.	1800	RRSIG	NSEC 13 5 1800 20881212130203 20201124094756 52634 example. T9QbehWk6xjJjI+cOjFhGbOZTmRf99Hto0NIp/7dybkDjSDPYwFLArCJ7jp12a8lAwYF1pwEKoK/0vgZXZaIAQ==
+c.nsec-deleg.z.z.example.	3600	RRSIG	A 13 5 3600 20881212125908 20201124094501 52634 example. NC7HVbewRYNqBVIWDPUCxWCXFfbdvPrRqC7dC11bV0dg/bAoF7r5Hp6Yk2rmEkdwwl77l+wScUbt9ob692WN6w==
+c.nsec-deleg.z.z.example.	1800	RRSIG	NSEC 13 5 1800 20881212130203 20201124094756 52634 example. qDtjtjUN+LHzUnLq6nUZ1FOATfeQ21Qvp8vxkRYHVvbqydEqv/6UGn8VUixV3KUJpTAU8QpwbIqKKZrUD1K1oA==
+;; DNSSEC NSEC chain
+example.            	1800	NSEC	a.example. NS SOA MX RRSIG NSEC DNSKEY
+a.example.          	1800	NSEC	ai.example. NS DS RRSIG NSEC
+ai.example.         	1800	NSEC	b.example. A HINFO AAAA RRSIG NSEC
+b.example.          	1800	NSEC	ns1.example. NS RRSIG NSEC
+ns1.example.        	1800	NSEC	ns2.example. A RRSIG NSEC
+ns2.example.        	1800	NSEC	*.to-apex.example. A RRSIG NSEC
+*.to-apex.example.  	1800	NSEC	*.to-nxdomain.example. CNAME RRSIG NSEC
+*.to-nxdomain.example.	1800	NSEC	*.w.example. CNAME RRSIG NSEC
+*.w.example.        	1800	NSEC	x.w.example. MX RRSIG NSEC
+x.w.example.        	1800	NSEC	x.y.w.example. MX RRSIG NSEC
+x.y.w.example.      	1800	NSEC	xx.example. MX RRSIG NSEC
+xx.example.         	1800	NSEC	\000.nsec-deleg.z.z.example. A HINFO AAAA RRSIG NSEC
+\000.nsec-deleg.z.z.example.	1800	NSEC	a.nsec-deleg.z.z.example. NS RRSIG NSEC
+a.nsec-deleg.z.z.example.	1800	NSEC	c.nsec-deleg.z.z.example. A RRSIG NSEC
+c.nsec-deleg.z.z.example.	1800	NSEC	example. A RRSIG NSEC
+;; Written 82 records
+;; Time 2020-11-24 12:23:26 CET
