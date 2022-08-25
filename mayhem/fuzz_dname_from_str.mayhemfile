@@ -1,0 +1,4 @@
+project: PROJECT
+target: fuzz_dname_from_str
+cmds:
+- cmd: /out/fuzz_dname_from_str
